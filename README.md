@@ -1,6 +1,6 @@
 # my_bag_assignment
 
-Flutter project using state.
+A new Flutter project.
 
 ## Getting Started
 
