@@ -57,6 +57,32 @@ class _CartState extends State<Cart> {
     });
   }
 
+  onTapAddButton(index) {
+    setState(() {
+      productList[index]["count"] = productList[index]["count"] + 1;
+      calculateTotalAmount();
+    });
+  }
+
+  onTapRemoveButton(index) {
+    setState(() {
+      if (productList[index]["count"] <= 1) {
+        productList[index]["count"] = 1;
+      } else {
+        productList[index]["count"] = productList[index]["count"] - 1;
+      }
+      calculateTotalAmount();
+    });
+  }
+
+  SuccessSnackbar(context) {
+    return ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text("Successfully Checkout"),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -101,7 +127,7 @@ class _CartState extends State<Cart> {
                                           children: [
                                             Text(
                                                 "${productList[index]["name"]}"),
-                                            Icon(Icons.more_vert),
+                                            const Icon(Icons.more_vert),
                                           ],
                                         ),
                                         Row(
@@ -109,13 +135,13 @@ class _CartState extends State<Cart> {
                                             RichText(
                                               text: TextSpan(
                                                 text: "Color: ",
-                                                style: TextStyle(
+                                                style: const TextStyle(
                                                     color: Colors.grey),
                                                 children: [
                                                   TextSpan(
                                                       text:
                                                           "${productList[index]["color"]}",
-                                                      style: TextStyle(
+                                                      style: const TextStyle(
                                                           color: Colors.black87,
                                                           fontWeight:
                                                               FontWeight.w500))
@@ -126,13 +152,13 @@ class _CartState extends State<Cart> {
                                             RichText(
                                               text: TextSpan(
                                                 text: "Size: ",
-                                                style: TextStyle(
+                                                style: const TextStyle(
                                                     color: Colors.grey),
                                                 children: [
                                                   TextSpan(
                                                     text:
                                                         "${productList[index]["size"]}",
-                                                    style: TextStyle(
+                                                    style: const TextStyle(
                                                         color: Colors.black87,
                                                         fontWeight:
                                                             FontWeight.w500),
@@ -151,24 +177,31 @@ class _CartState extends State<Cart> {
                                                   MainAxisAlignment.start,
                                               children: [
                                                 IconButton(
-                                                  onPressed: () {},
-                                                  icon: Icon(
+                                                  onPressed: () {
+                                                    onTapRemoveButton(index);
+                                                  },
+                                                  icon: const Icon(
                                                     Icons.remove,
                                                     color: Colors.grey,
                                                   ),
                                                 ),
-                                                SizedBox(width: 10),
+                                                const SizedBox(width: 10),
                                                 Text(
                                                     "${productList[index]["count"]}"),
-                                                SizedBox(width: 10),
+                                                const SizedBox(width: 10),
                                                 IconButton(
-                                                  onPressed: () {},
-                                                  icon: Icon(Icons.add),
+                                                  onPressed: () {
+                                                    onTapAddButton(index);
+                                                  },
+                                                  icon: const Icon(Icons.add),
                                                 ),
                                               ],
                                             ),
                                             Text(
-                                                "${productList[index]["unitPrice"].toString()}\$"),
+                                                "${productList[index]["unitPrice"].toString()}\$",
+                                                style: const TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.w700)),
                                           ],
                                         )
                                       ],
@@ -188,8 +221,11 @@ class _CartState extends State<Cart> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("Total amount:"),
-                  Text("${totalAmount}\$"),
+                  const Text("Total amount:"),
+                  Text(
+                    "${totalAmount}\$",
+                    style: const TextStyle(fontWeight: FontWeight.w700),
+                  ),
                 ],
               ),
             ),
@@ -197,8 +233,10 @@ class _CartState extends State<Cart> {
               children: [
                 Expanded(
                   child: ElevatedButton(
-                    onPressed: () {},
-                    child: const Text("Shopping"),
+                    onPressed: () {
+                      SuccessSnackbar(context);
+                    },
+                    child: const Text("CHECK OUT"),
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.red,
                         foregroundColor: Colors.white),
